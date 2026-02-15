@@ -2,10 +2,10 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import prisma from '@/lib/db/prisma';
-import { getNgoDashboardStats } from '@/lib/actions/ngo';
-import { NgoDashboardClient } from './ngo-dashboard-client';
+import { getNgoAnalytics } from '@/lib/actions/ngo';
+import { AnalyticsClient } from './analytics-client';
 
-export default async function NgoDashboard() {
+export default async function AnalyticsPage() {
   const session = await getServerSession(authOptions);
 
   if (!session?.user || session.user.role !== 'NGO') {
@@ -20,26 +20,23 @@ export default async function NgoDashboard() {
     redirect('/auth/register');
   }
 
-  // Check if NGO is approved
   if (ngoProfile.approvalStatus !== 'APPROVED') {
     redirect('/verification-pending');
   }
 
-  const statsResult = await getNgoDashboardStats();
+  const result = await getNgoAnalytics();
   
-  const stats = !('error' in statsResult) ? statsResult : {
-    availableRequests: 0,
-    activePickups: 0,
-    completedPickups: 0,
-    expiredMissed: 0,
-    totalMealsCollected: 0,
-    recentActivity: [],
+  const analytics = !('error' in result) ? result : {
+    monthlyData: [],
+    totalPickups: 0,
+    totalMeals: 0,
+    averageDistance: 0,
+    completionRate: 0,
   };
 
   return (
-    <NgoDashboardClient
-      session={session}
-      stats={stats}
+    <AnalyticsClient
+      analytics={analytics}
       ngoProfile={ngoProfile}
     />
   );

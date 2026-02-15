@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Navigation } from "@/components/navigation";
+import { SessionProvider } from "@/components/providers/session-provider";
 
 export const metadata: Metadata = {
   title: "SurplusLink - Real-Time Event Food Rescue Network",
@@ -16,20 +17,22 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="antialiased min-h-screen bg-background font-sans">
-        <Navigation />
-        <main className="flex-1">
-          {children}
-        </main>
-        <footer className="py-6 px-4 md:px-6 border-t">
-          <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-muted-foreground">
-              © 2024 SurplusLink. All rights reserved.
-            </p>
-            <p className="text-sm text-muted-foreground">
-              Fighting hunger, reducing waste.
-            </p>
-          </div>
-        </footer>
+        <SessionProvider>
+          <Navigation />
+          <main className="flex-1">
+            {children}
+          </main>
+          <footer className="py-6 px-4 md:px-6 border-t">
+            <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+              <p className="text-sm text-muted-foreground">
+                © 2024 SurplusLink. All rights reserved.
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Fighting hunger, reducing waste.
+              </p>
+            </div>
+          </footer>
+        </SessionProvider>
       </body>
     </html>
   );

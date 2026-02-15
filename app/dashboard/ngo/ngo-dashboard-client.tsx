@@ -1,177 +1,202 @@
 'use client';
 
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { MapView } from './map-view';
-import { acceptFoodRequest } from '@/lib/actions/food-request';
 import { formatDistanceToNow } from 'date-fns';
+import { List, Truck, CheckCircle, AlertCircle, Utensils, Clock, History, BarChart3, User, MapPin } from 'lucide-react';
+
+interface RecentActivity {
+  id: string;
+  acceptedAt: Date | string;
+  completedAt: Date | string | null;
+  status: string;
+  foodRequest: {
+    id: string;
+    quantity: number;
+    category: string;
+    isVeg: boolean;
+    donor: {
+      user: { name: string | null };
+      organizationName: string | null;
+    };
+  };
+}
 
 interface NgoDashboardClientProps {
   session: any;
-  stats: any;
-  foodRequests: any[];
-  ngoProfile: any;
+  stats: {
+    availableRequests: number;
+    activePickups: number;
+    completedPickups: number;
+    expiredMissed: number;
+    totalMealsCollected: number;
+    recentActivity: RecentActivity[];
+  };
+  ngoProfile: {
+    id: string;
+    ngoName: string;
+    approvalStatus: string;
+    serviceRadiusKm: number;
+    latitude: number | null;
+    longitude: number | null;
+  };
 }
 
 export function NgoDashboardClient({
   session,
   stats,
-  foodRequests,
   ngoProfile,
 }: NgoDashboardClientProps) {
-  const [view, setView] = useState<'list' | 'map'>('list');
-  const [accepting, setAccepting] = useState<string | null>(null);
-
-  async function handleAccept(requestId: string) {
-    setAccepting(requestId);
-    try {
-      const result = await acceptFoodRequest(requestId);
-      if (result.success) {
-        alert(`Request accepted! OTP: ${result.otp}`);
-      } else {
-        alert(result.error);
-      }
-    } catch (err) {
-      alert('An error occurred');
-    } finally {
-      setAccepting(null);
-    }
-  }
-
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'OPEN':
-        return <Badge variant="success">Available</Badge>;
-      case 'RESERVED':
-        return <Badge variant="warning">Reserved</Badge>;
       case 'COMPLETED':
-        return <Badge variant="secondary">Completed</Badge>;
-      case 'EXPIRED':
-        return <Badge variant="destructive">Expired</Badge>;
+        return <Badge variant="success" className="flex items-center gap-1"><CheckCircle className="h-3 w-3" /> Completed</Badge>;
+      case 'PENDING':
+        return <Badge variant="warning" className="flex items-center gap-1"><Clock className="h-3 w-3" /> Pending</Badge>;
+      case 'CANCELLED':
+        return <Badge variant="destructive">Cancelled</Badge>;
       default:
-        return <Badge>{status}</Badge>;
+        return <Badge variant="outline">{status}</Badge>;
     }
   };
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
-        <div>
-          <h1 className="text-3xl font-bold">NGO Dashboard</h1>
-          <p className="text-muted-foreground">
-            {ngoProfile.ngoName} • Verified NGO
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <Button
-            variant={view === 'list' ? 'default' : 'outline'}
-            onClick={() => setView('list')}
-          >
-            List View
-          </Button>
-          <Button
-            variant={view === 'map' ? 'default' : 'outline'}
-            onClick={() => setView('map')}
-          >
-            Map View
-          </Button>
-        </div>
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold">Dashboard Overview</h1>
+        <p className="text-muted-foreground">
+          {ngoProfile.ngoName} • Verified NGO
+        </p>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
         <Card>
           <CardHeader className="pb-2">
-            <CardDescription>Available Requests</CardDescription>
-            <CardTitle className="text-3xl">{foodRequests.length || 0}</CardTitle>
+            <CardDescription className="flex items-center gap-2">
+              <List className="h-4 w-4" />
+              Requests Nearby
+            </CardDescription>
+            <CardTitle className="text-3xl">{stats.availableRequests}</CardTitle>
           </CardHeader>
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardDescription>Total Pickups</CardDescription>
-            <CardTitle className="text-3xl">{stats.total || 0}</CardTitle>
+            <CardDescription className="flex items-center gap-2">
+              <Truck className="h-4 w-4" />
+              Active Pickups
+            </CardDescription>
+            <CardTitle className="text-3xl">{stats.activePickups}</CardTitle>
           </CardHeader>
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardDescription>Pending Pickups</CardDescription>
-            <CardTitle className="text-3xl text-orange-600">{stats.pending || 0}</CardTitle>
+            <CardDescription className="flex items-center gap-2">
+              <CheckCircle className="h-4 w-4" />
+              Completed
+            </CardDescription>
+            <CardTitle className="text-3xl">{stats.completedPickups}</CardTitle>
           </CardHeader>
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardDescription>Success Rate</CardDescription>
-            <CardTitle className="text-3xl text-green-600">{stats.successRate || 0}%</CardTitle>
+            <CardDescription className="flex items-center gap-2">
+              <AlertCircle className="h-4 w-4" />
+              Expired/Missed
+            </CardDescription>
+            <CardTitle className="text-3xl">{stats.expiredMissed}</CardTitle>
+          </CardHeader>
+        </Card>
+        <Card>
+          <CardHeader className="pb-2">
+            <CardDescription className="flex items-center gap-2">
+              <Utensils className="h-4 w-4" />
+              Total Meals
+            </CardDescription>
+            <CardTitle className="text-3xl">{stats.totalMealsCollected}</CardTitle>
           </CardHeader>
         </Card>
       </div>
 
-      {/* Food Requests */}
+      {/* Quick Actions */}
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <Link href="/dashboard/ngo/available-requests">
+          <Card className="hover:bg-gray-50 transition-colors cursor-pointer h-full">
+            <CardContent className="flex flex-col items-center justify-center py-6">
+              <List className="h-8 w-8 text-green-600 mb-2" />
+              <p className="font-medium">Browse Requests</p>
+            </CardContent>
+          </Card>
+        </Link>
+        <Link href="/dashboard/ngo/active-pickups">
+          <Card className="hover:bg-gray-50 transition-colors cursor-pointer h-full">
+            <CardContent className="flex flex-col items-center justify-center py-6">
+              <Truck className="h-8 w-8 text-blue-600 mb-2" />
+              <p className="font-medium">Active Pickups</p>
+            </CardContent>
+          </Card>
+        </Link>
+        <Link href="/dashboard/ngo/history">
+          <Card className="hover:bg-gray-50 transition-colors cursor-pointer h-full">
+            <CardContent className="flex flex-col items-center justify-center py-6">
+              <History className="h-8 w-8 text-purple-600 mb-2" />
+              <p className="font-medium">History</p>
+            </CardContent>
+          </Card>
+        </Link>
+        <Link href="/dashboard/ngo/analytics">
+          <Card className="hover:bg-gray-50 transition-colors cursor-pointer h-full">
+            <CardContent className="flex flex-col items-center justify-center py-6">
+              <BarChart3 className="h-8 w-8 text-orange-600 mb-2" />
+              <p className="font-medium">Analytics</p>
+            </CardContent>
+          </Card>
+        </Link>
+      </div>
+
+      {/* Recent Activity */}
       <Card>
         <CardHeader>
-          <CardTitle>Available Food Requests</CardTitle>
+          <CardTitle>Recent Activity</CardTitle>
           <CardDescription>
-            Food donations near you • Service radius: {ngoProfile.serviceRadiusKm}km
+            Your latest pickup activities
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {view === 'map' ? (
-            <MapView requests={foodRequests} ngoLat={ngoProfile.latitude} ngoLng={ngoProfile.longitude} />
+          {stats.recentActivity.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              No recent activity. Start by accepting a food request!
+            </div>
           ) : (
-            <>
-              {foodRequests.length === 0 ? (
-                <div className="text-center py-8 text-muted-foreground">
-                  No food requests available in your area at the moment.
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {foodRequests.map((request: any) => (
-                    <div
-                      key={request.id}
-                      className="flex flex-col md:flex-row md:items-center justify-between p-4 border rounded-lg gap-4"
-                    >
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Badge variant={request.isVeg ? 'success' : 'warning'}>
-                            {request.isVeg ? 'Veg' : 'Non-Veg'}
-                          </Badge>
-                          <Badge variant="outline">{request.category.replace('_', ' ')}</Badge>
-                          <Badge variant="secondary">
-                            {request.distance?.toFixed(1) || 'N/A'} km away
-                          </Badge>
-                        </div>
-                        <h4 className="font-medium">
-                          {request.quantity} servings • {request.storageType.replace('_', ' ')}
-                        </h4>
-                        {request.description && (
-                          <p className="text-sm text-muted-foreground mt-1">
-                            {request.description}
-                          </p>
-                        )}
-                        <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
-                          <span>
-                            Expires: {formatDistanceToNow(new Date(request.expiryTime), { addSuffix: true })}
-                          </span>
-                          <span>
-                            {request.donor?.user?.name || 'Anonymous Donor'}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="flex gap-2">
-                        <Button
-                          onClick={() => handleAccept(request.id)}
-                          disabled={accepting === request.id}
-                        >
-                          {accepting === request.id ? 'Accepting...' : 'Accept'}
-                        </Button>
-                      </div>
+            <div className="space-y-4">
+              {stats.recentActivity.map((activity) => (
+                <div
+                  key={activity.id}
+                  className="flex items-center justify-between p-4 border rounded-lg"
+                >
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Badge variant={activity.foodRequest.isVeg ? 'success' : 'warning'}>
+                        {activity.foodRequest.isVeg ? 'Veg' : 'Non-Veg'}
+                      </Badge>
+                      {getStatusBadge(activity.status)}
                     </div>
-                  ))}
+                    <p className="font-medium">
+                      {activity.foodRequest.quantity} servings • {activity.foodRequest.category.replace('_', ' ')}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {activity.foodRequest.donor.organizationName || activity.foodRequest.donor.user.name || 'Anonymous'}
+                    </p>
+                  </div>
+                  <div className="text-right text-sm text-muted-foreground">
+                    {activity.completedAt
+                      ? `Completed ${formatDistanceToNow(new Date(activity.completedAt), { addSuffix: true })}`
+                      : `Accepted ${formatDistanceToNow(new Date(activity.acceptedAt), { addSuffix: true })}`}
+                  </div>
                 </div>
-              )}
-            </>
+              ))}
+            </div>
           )}
         </CardContent>
       </Card>

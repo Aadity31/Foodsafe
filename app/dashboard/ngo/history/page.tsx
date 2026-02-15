@@ -2,10 +2,10 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import prisma from '@/lib/db/prisma';
-import { getNgoDashboardStats } from '@/lib/actions/ngo';
-import { NgoDashboardClient } from './ngo-dashboard-client';
+import { getPickupHistory } from '@/lib/actions/ngo';
+import { HistoryClient } from './history-client';
 
-export default async function NgoDashboard() {
+export default async function HistoryPage() {
   const session = await getServerSession(authOptions);
 
   if (!session?.user || session.user.role !== 'NGO') {
@@ -20,26 +20,16 @@ export default async function NgoDashboard() {
     redirect('/auth/register');
   }
 
-  // Check if NGO is approved
   if (ngoProfile.approvalStatus !== 'APPROVED') {
     redirect('/verification-pending');
   }
 
-  const statsResult = await getNgoDashboardStats();
-  
-  const stats = !('error' in statsResult) ? statsResult : {
-    availableRequests: 0,
-    activePickups: 0,
-    completedPickups: 0,
-    expiredMissed: 0,
-    totalMealsCollected: 0,
-    recentActivity: [],
-  };
+  const result = await getPickupHistory();
+  const history = 'history' in result ? (result.history ?? []) : [];
 
   return (
-    <NgoDashboardClient
-      session={session}
-      stats={stats}
+    <HistoryClient
+      history={history}
       ngoProfile={ngoProfile}
     />
   );

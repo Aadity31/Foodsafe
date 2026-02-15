@@ -2,7 +2,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { redirect, notFound } from 'next/navigation';
 import prisma from '@/lib/db/prisma';
-import { RequestDetailClient } from './request-detail-client';
+import { RequestDetailClient } from './request-detail-client.tsx';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -56,5 +56,20 @@ export default async function RequestDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  return <RequestDetailClient request={request} />;
+  // Convert Date fields to strings for client component
+  const requestData = {
+    ...request,
+    expiryTime: request.expiryTime.toISOString(),
+    createdAt: request.createdAt.toISOString(),
+    updatedAt: request.updatedAt.toISOString(),
+    reservation: request.reservation
+      ? {
+          ...request.reservation,
+          acceptedAt: request.reservation.acceptedAt?.toISOString() || '',
+          completedAt: request.reservation.completedAt?.toISOString() || null,
+        }
+      : null,
+  };
+
+  return <RequestDetailClient request={requestData} />;
 }

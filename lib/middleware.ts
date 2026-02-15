@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { getToken } from 'next-auth/jwt';
+import prisma from '@/lib/db/prisma';
 
 export async function middleware(request: NextRequest) {
   const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
@@ -32,24 +33,40 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/', request.url));
   }
 
-  if (ngoRoutes && token.role !== 'NGO') {
-    if (token.role === 'DONOR') {
-      return NextResponse.redirect(new URL('/dashboard/donor', request.url));
+  // NGO routes - check role and approval status
+  if (ngoRoutes) {
+    // First check role
+    if (token.role !== 'NGO') {
+      if (token.role === 'DONOR') {
+        return NextResponse.redirect(new URL('/dashboard/donor', request.url));
+      }
+      if (token.role === 'ADMIN') {
+        return NextResponse.redirect(new URL('/admin', request.url));
+      }
+      return NextResponse.redirect(new URL('/', request.url));
     }
-    if (token.role === 'ADMIN') {
-      return NextResponse.redirect(new URL('/admin', request.url));
+
+    // Check NGO approval status
+    // Skip check for verification-pending page itself and API routes
+    if (!pathname.startsWith('/dashboard/ngo/verification-pending') && 
+        !pathname.startsWith('/api/')) {
+      
+      const ngoProfile = await prisma.ngoProfile.findUnique({
+        where: { userId: token.id },
+        select: { approvalStatus: true }
+      });
+
+      if (ngoProfile && ngoProfile.approvalStatus !== 'APPROVED') {
+        // Redirect to verification pending page
+        return NextResponse.redirect(new URL('/verification-pending', request.url));
+      }
     }
-    return NextResponse.redirect(new URL('/', request.url));
   }
 
   if (adminRoutes && token.role !== 'ADMIN') {
     return NextResponse.redirect(new URL('/', request.url));
   }
 
-  // Check for unverified users accessing dashboard
-  // Note: We would need to fetch user.verified from DB in a real implementation
-  // For now, this is a placeholder
-  
   return NextResponse.next();
 }
 
