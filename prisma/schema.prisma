@@ -1,0 +1,165 @@
+// Prisma Schema for SurplusLink - Food Rescue Network
+// PostgreSQL Database
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User Model - Base authentication model
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String
+  name          String?
+  role          UserRole  @default(DONOR)
+  verified      Boolean   @default(false)
+  suspended     Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  donorProfile   DonorProfile?
+  ngoProfile     NgoProfile?
+
+  @@index([email])
+  @@index([role])
+}
+
+enum UserRole {
+  DONOR
+  NGO
+  ADMIN
+}
+
+// Donor Profile - Extended user info for event hosts
+model DonorProfile {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  organizationName String?
+  phone           String?
+  address         String?
+  latitude        Float?
+  longitude       Float?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  foodRequests    FoodRequest[]
+
+  @@index([userId])
+}
+
+// NGO Profile - Extended user info for verified NGOs
+model NgoProfile {
+  id                  String             @id @default(cuid())
+  userId              String             @unique
+  ngoName             String
+  registrationNumber  String?
+  phone               String?
+  address             String?
+  latitude            Float?
+  longitude           Float?
+  serviceRadiusKm     Float              @default(25)
+  approvalStatus      ApprovalStatus     @default(PENDING)
+  verifiedAt          DateTime?
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+
+  // Relations
+  user                User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reservations        Reservation[]
+
+  @@index([userId])
+  @@index([approvalStatus])
+}
+
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+// Food Request - Core business model for food donations
+model FoodRequest {
+  id            String           @id @default(cuid())
+  donorId       String
+  category      FoodCategory
+  quantity      Int              // Approximate people served
+  description   String?
+  isVeg         Boolean
+  storageType   StorageType
+  latitude      Float
+  longitude     Float
+  address       String?
+  expiryTime    DateTime
+  status        FoodRequestStatus @default(OPEN)
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  // Relations
+  donor         DonorProfile     @relation(fields: [donorId], references: [id], onDelete: Cascade)
+  reservation   Reservation?
+
+  @@index([donorId])
+  @@index([status])
+  @@index([expiryTime])
+  @@index([latitude, longitude])
+}
+
+enum FoodCategory {
+  COOKED_VEG
+  COOKED_NON_VEG
+  DRY_ITEMS
+  PACKAGED
+  BAKED_GOODS
+  FRUITS_VEGETABLES
+  DAIRY
+  BEVERAGES
+  OTHER
+}
+
+enum StorageType {
+  ROOM_TEMPERATURE
+  REFRIGERATED
+  FROZEN
+}
+
+enum FoodRequestStatus {
+  OPEN
+  RESERVED
+  COMPLETED
+  EXPIRED
+  CANCELLED
+}
+
+// Reservation - Tracks NGO acceptance and pickup
+model Reservation {
+  id              String          @id @default(cuid())
+  foodRequestId   String          @unique
+  ngoId           String
+  otpHash         String
+  photoUrl        String?
+  acceptedAt      DateTime        @default(now())
+  completedAt     DateTime?
+  failedAttempts  Int             @default(0)
+  status          ReservationStatus @default(PENDING)
+
+  // Relations
+  foodRequest     FoodRequest     @relation(fields: [foodRequestId], references: [id], onDelete: Cascade)
+  ngo             NgoProfile      @relation(fields: [ngoId], references: [id], onDelete: Cascade)
+
+  @@index([foodRequestId])
+  @@index([ngoId])
+}
+
+enum ReservationStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
