@@ -80,7 +80,7 @@ export default function RootLayout({
           <footer className="py-4 md:py-6 px-4 md:px-6 border-t">
             <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-2 md:gap-4">
               <p className="text-xs md:text-sm text-muted-foreground">
-                © 2024 FoodSafe. All rights reserved.
+                © 2026 FoodSafe. All rights reserved.
               </p>
               <div className="flex items-center gap-4 text-xs md:text-sm text-muted-foreground">
                 <Link href="/privacy" className="hover:text-foreground transition-colors">

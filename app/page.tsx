@@ -261,7 +261,7 @@ export default function LandingPage() {
             </div>
           </div>
           <div className="border-t mt-8 pt-8 text-center text-sm text-muted-foreground">
-            <p>© 2024 FoodSafe. All rights reserved. A non-profit initiative.</p>
+            <p>© 2026 FoodSafe. All rights reserved. A non-profit initiative.</p>
           </div>
         </div>
       </footer>
