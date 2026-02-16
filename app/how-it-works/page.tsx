@@ -530,7 +530,7 @@ export default function HowItWorksPage() {
               </Button>
             </Link>
             <Link href="/auth/register?role=ngo">
-              <Button size="lg" variant="outline" className="w-full sm:w-auto border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary">
+              <Button size="lg" variant="outline" className="w-full sm:w-auto border-primary-foreground text-red-500 hover:bg-primary-foreground hover:text-primary">
                 Register as NGO
               </Button>
             </Link>

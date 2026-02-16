@@ -207,12 +207,27 @@ export async function acceptFoodRequest(foodRequestId: string) {
 }
 
 /**
- * Complete pickup with OTP verification
+ * Complete pickup with OTP verification - Only the donor can confirm
  */
 export async function completePickup(foodRequestId: string, otp: string, photoUrl?: string) {
   const session = await getServerSession(authOptions);
   if (!session?.user) {
     return { error: 'Unauthorized' };
+  }
+
+  // Get the food request to check if the current user is the donor
+  const foodRequest = await prisma.foodRequest.findUnique({
+    where: { id: foodRequestId },
+    include: { donor: { include: { user: true } } },
+  });
+
+  if (!foodRequest) {
+    return { error: 'Food request not found' };
+  }
+
+  // Verify that the current user is the donor
+  if (foodRequest.donor.userId !== session.user.id) {
+    return { error: 'Only the donor can confirm pickup completion' };
   }
 
   const reservation = await prisma.reservation.findUnique({

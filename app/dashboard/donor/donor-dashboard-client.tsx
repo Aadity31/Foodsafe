@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { FoodRequestForm } from './food-request-form';
 import { createFoodRequest, cancelFoodRequest } from '@/lib/actions/food-request';
+import { format } from 'date-fns';
 
 interface DonorDashboardClientProps {
   session: any;
@@ -128,7 +129,7 @@ export function DonorDashboardClient({
                       {request.quantity} servings • {request.storageType.replace('_', ' ')}
                     </h4>
                     <p className="text-sm text-muted-foreground">
-                      Created: {new Date(request.createdAt).toLocaleDateString()}
+                      Created: {format(new Date(request.createdAt), 'dd/MM/yyyy')}
                     </p>
                     {request.reservation && (
                       <p className="text-sm text-muted-foreground">

@@ -3,6 +3,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useState } from 'react';
+import { completePickup } from '@/lib/actions/food-request';
 
 interface FoodRequest {
   id: string;
@@ -83,6 +87,9 @@ function getStatusColor(status: string): string {
 }
 
 export function RequestDetailClient({ request }: RequestDetailClientProps) {
+  const [otp, setOtp] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleCancel = async () => {
     if (!confirm('Are you sure you want to cancel this request?')) return;
 
@@ -103,21 +110,24 @@ export function RequestDetailClient({ request }: RequestDetailClientProps) {
   };
 
   const handleComplete = async () => {
-    if (!confirm('Mark this request as completed?')) return;
+    if (!otp || otp.length !== 6) {
+      alert('Please enter the 6-digit OTP provided by the NGO');
+      return;
+    }
 
+    setIsSubmitting(true);
     try {
-      const response = await fetch(`/api/food-requests/${request.id}/complete`, {
-        method: 'POST',
-      });
-
-      if (response.ok) {
+      const result = await completePickup(request.id, otp);
+      
+      if (result.success) {
         window.location.reload();
       } else {
-        const data = await response.json();
-        alert(data.error || 'Failed to complete request');
+        alert(result.error || 'Failed to complete request');
       }
     } catch (error) {
       alert('An error occurred while completing the request');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -229,10 +239,33 @@ export function RequestDetailClient({ request }: RequestDetailClientProps) {
         )}
 
         {request.status === 'RESERVED' && (
-          <div className="flex gap-4">
-            <Button onClick={handleComplete}>
-              Mark as Completed
-            </Button>
+          <div className="space-y-4">
+            <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <p className="font-medium text-yellow-800 mb-2">Enter OTP to Confirm Pickup</p>
+              <p className="text-sm text-yellow-600 mb-4">
+                Ask the NGO representative for the 6-digit OTP to verify the pickup
+              </p>
+              <div className="flex gap-4 items-end">
+                <div className="flex-1">
+                  <Label htmlFor="otp">OTP</Label>
+                  <Input
+                    id="otp"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                    placeholder="Enter 6-digit OTP"
+                    maxLength={6}
+                    className="text-center text-xl tracking-widest font-mono"
+                  />
+                </div>
+                <Button 
+                  onClick={handleComplete} 
+                  disabled={isSubmitting || otp.length !== 6}
+                  className=""
+                >
+                  {isSubmitting ? 'Confirming...' : 'Confirm Pickup'}
+                </Button>
+              </div>
+            </div>
           </div>
         )}
       </div>

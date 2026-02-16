@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { approveNgo, rejectNgo, suspendUser, unsuspendUser } from '@/lib/actions/admin';
+import { format } from 'date-fns';
 
 interface AdminDashboardClientProps {
   session: any;
@@ -130,7 +131,7 @@ export function AdminDashboardClient({
                           </p>
                         )}
                         <p className="text-xs text-muted-foreground mt-1">
-                          Applied: {new Date(ngo.createdAt).toLocaleDateString()}
+                          Applied: {format(new Date(ngo.createdAt), 'dd/MM/yyyy')}
                         </p>
                       </div>
                       <div className="flex gap-2">
@@ -186,7 +187,7 @@ export function AdminDashboardClient({
                       </div>
                     </div>
                     <div className="text-right text-sm text-muted-foreground">
-                      {new Date(request.createdAt).toLocaleDateString()}
+                      {format(new Date(request.createdAt), 'dd/MM/yyyy')}
                     </div>
                   </div>
                 ))}

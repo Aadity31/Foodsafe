@@ -2,7 +2,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { redirect, notFound } from 'next/navigation';
 import prisma from '@/lib/db/prisma';
-import { RequestDetailClient } from './request-detail-client.tsx';
+import { RequestDetailClient } from './request-detail-client';
 
 interface PageProps {
   params: Promise<{ id: string }>;

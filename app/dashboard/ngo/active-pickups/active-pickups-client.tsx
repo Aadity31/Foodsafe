@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { confirmPickup, cancelReservation } from '@/lib/actions/ngo';
 import { formatDistanceToNow } from 'date-fns';
-import { MapPin, Clock, Navigation, CheckCircle, XCircle, AlertTriangle, Camera, Loader2 } from 'lucide-react';
+import { MapPin, Clock, Navigation, CheckCircle, XCircle, AlertTriangle, Camera, Loader2, Map } from 'lucide-react';
 
 interface Pickup {
   id: string;
@@ -187,6 +187,22 @@ export function ActivePickupsClient({ pickups, ngoProfile }: ActivePickupsClient
                       </div>
                     </div>
 
+                    {/* Get Directions Button */}
+                    {pickup.foodRequest.latitude && pickup.foodRequest.longitude && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="mt-2"
+                        onClick={() => {
+                          const url = `https://www.google.com/maps/dir/?api=1&destination=${pickup.foodRequest.latitude},${pickup.foodRequest.longitude}`;
+                          window.open(url, '_blank');
+                        }}
+                      >
+                        <Map className="mr-2 h-4 w-4" />
+                        Get Directions
+                      </Button>
+                    )}
+
                     <div className="mt-3 text-sm">
                       <span className="text-muted-foreground">Donor: </span>
                       <span className="font-medium">
@@ -208,13 +224,10 @@ export function ActivePickupsClient({ pickups, ngoProfile }: ActivePickupsClient
                       </div>
                     ) : (
                       <>
-                        <Button
-                          className="w-full"
-                          onClick={() => setShowConfirmModal(pickup.foodRequest.id)}
-                        >
-                          <CheckCircle className="mr-2 h-4 w-4" />
-                          Confirm Pickup
-                        </Button>
+                        <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-800">
+                          <p className="font-medium">Waiting for donor confirmation</p>
+                          <p className="text-xs mt-1">Share the OTP with the donor to confirm pickup</p>
+                        </div>
                         <Button
                           variant="outline"
                           className="w-full text-red-600 hover:text-red-700 hover:bg-red-50"
