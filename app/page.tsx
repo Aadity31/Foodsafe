@@ -7,18 +7,18 @@ export default function LandingPage() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative py-20 lg:py-32 overflow-hidden">
+      <section className="relative py-16 md:py-20 lg:py-32 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-background" />
         <div className="container mx-auto px-4 relative">
           <div className="max-w-3xl mx-auto text-center">
             <Badge variant="secondary" className="mb-4">
               Real-Time Food Rescue Network
             </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4 md:mb-6">
               Turn Surplus Food Into{' '}
               <span className="text-primary">Hope</span>
             </h1>
-            <p className="text-xl text-muted-foreground mb-8">
+            <p className="text-lg md:text-xl text-muted-foreground mb-6 md:mb-8">
               Connect event hosts with verified NGOs to rescue surplus food in real-time.
               Fight hunger while reducing food waste — one meal at a time.
             </p>
@@ -39,11 +39,11 @@ export default function LandingPage() {
       </section>
 
       {/* Problem Statement */}
-      <section className="py-16 bg-muted/50">
+      <section className="py-12 md:py-16 bg-muted/50">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-8">The Food Waste Crisis</h2>
-            <div className="grid md:grid-cols-3 gap-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-center mb-6 md:mb-8">The Food Waste Crisis</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <Card>
                 <CardHeader>
                   <CardTitle className="text-4xl font-bold text-primary">1.3B</CardTitle>
@@ -80,10 +80,10 @@ export default function LandingPage() {
       </section>
 
       {/* How It Works */}
-      <section className="py-20">
+      <section className="py-12 md:py-20">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">How FoodSafe Works</h2>
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-bold text-center mb-8 md:mb-12">How FoodSafe Works</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 max-w-5xl mx-auto">
             <div className="text-center">
               <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary mx-auto mb-4">
                 <svg
@@ -154,10 +154,10 @@ export default function LandingPage() {
       </section>
 
       {/* Impact Metrics */}
-      <section className="py-16 bg-primary text-primary-foreground">
+      <section className="py-12 md:py-16 bg-primary text-primary-foreground">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">Our Impact</h2>
-          <div className="grid md:grid-cols-4 gap-8 max-w-4xl mx-auto text-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 max-w-4xl mx-auto text-center">
             <div>
               <div className="text-4xl font-bold mb-2">10,000+</div>
               <p className="text-primary-foreground/80">Meals Rescued</p>
@@ -179,13 +179,13 @@ export default function LandingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20">
+      <section className="py-12 md:py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <Card className="overflow-hidden">
               <div className="grid md:grid-cols-2">
-                <div className="p-8 flex flex-col justify-center">
-                  <h2 className="text-2xl font-bold mb-4">For Event Hosts</h2>
+                <div className="p-6 md:p-8 flex flex-col justify-center">
+                  <h2 className="text-xl md:text-2xl font-bold mb-3 md:mb-4">For Event Hosts</h2>
                   <p className="text-muted-foreground mb-6">
                     Turn your event surplus into community support. Reduce waste costs and make a positive impact.
                   </p>
@@ -193,8 +193,8 @@ export default function LandingPage() {
                     <Button>Register as Donor</Button>
                   </Link>
                 </div>
-                <div className="p-8 flex flex-col justify-center border-t md:border-t-0 md:border-l">
-                  <h2 className="text-2xl font-bold mb-4">For NGOs</h2>
+                <div className="p-6 md:p-8 flex flex-col justify-center border-t md:border-t-0 md:border-l">
+                  <h2 className="text-xl md:text-2xl font-bold mb-3 md:mb-4">For NGOs</h2>
                   <p className="text-muted-foreground mb-6">
                     Access reliable food sources for your community. Expand your reach with geo-matched donations.
                   </p>
@@ -209,9 +209,9 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 border-t">
+      <footer className="py-8 md:py-12 border-t">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">

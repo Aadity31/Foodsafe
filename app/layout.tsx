@@ -1,7 +1,13 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Navigation } from "@/components/navigation";
 import { SessionProvider } from "@/components/providers/session-provider";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+};
 
 export const metadata: Metadata = {
   title: {
@@ -66,12 +72,12 @@ export default function RootLayout({
           <main className="flex-1">
             {children}
           </main>
-          <footer className="py-6 px-4 md:px-6 border-t">
-            <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-              <p className="text-sm text-muted-foreground">
+          <footer className="py-4 md:py-6 px-4 md:px-6 border-t">
+            <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-2 md:gap-4">
+              <p className="text-xs md:text-sm text-muted-foreground">
                 © 2024 FoodSafe. All rights reserved.
               </p>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs md:text-sm text-muted-foreground">
                 Fighting hunger, reducing waste.
               </p>
             </div>
