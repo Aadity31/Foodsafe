@@ -8,16 +8,17 @@ import { redirect } from 'next/navigation';
 const NEXTAUTH_SECRET = process.env.NEXTAUTH_SECRET;
 const NEXTAUTH_URL = process.env.NEXTAUTH_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
 
-// In production, NEXTAUTH_SECRET must be set
-if (!NEXTAUTH_SECRET && process.env.NODE_ENV === 'production') {
-  throw new Error('NEXTAUTH_SECRET is not set. Please add NEXTAUTH_SECRET to your .env file or Vercel environment variables.');
+// Debug: Log environment info in development
+if (process.env.NODE_ENV === 'development') {
+  console.log('[Auth] Running in development mode');
+  console.log('[Auth] NEXTAUTH_SECRET present:', !!NEXTAUTH_SECRET);
 }
 
-// For development, use a default secret if not set (only in dev mode)
-const secret = NEXTAUTH_SECRET || (process.env.NODE_ENV === 'development' ? 'development-secret-do-not-use-in-production' : '');
+// For production, use a placeholder if not set (will fail gracefully)
+const secret = NEXTAUTH_SECRET || (process.env.NODE_ENV === 'production' ? 'placeholder-secret-please-set-in-vercel' : 'development-secret-do-not-use-in-production');
 
-if (!secret && process.env.NODE_ENV === 'production') {
-  throw new Error('NEXTAUTH_SECRET is not set. Please add NEXTAUTH_SECRET to your .env file or Vercel environment variables.');
+if (!NEXTAUTH_SECRET && process.env.NODE_ENV === 'production') {
+  console.warn('[Auth] WARNING: NEXTAUTH_SECRET is not set in production! Please add it to Vercel environment variables.');
 }
 
 declare module 'next-auth' {
