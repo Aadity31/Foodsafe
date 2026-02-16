@@ -4,26 +4,26 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
 export const metadata = {
-  title: 'How It Works | SurplusLink',
-  description: 'Learn how SurplusLink connects event hosts with verified NGOs to rescue surplus food in real-time.',
+  title: 'How It Works | FoodSafe',
+  description: 'Learn how FoodSafe connects event hosts with verified NGOs to rescue surplus food in real-time.',
 };
 
 const faqs = [
   {
     question: 'Is the food safe to consume?',
-    answer: 'Yes. SurplusLink implements strict safety protocols including expiry time tracking, storage condition verification, and quality checks. Only food within safe consumption windows is eligible for pickup. We also verify all NGOs for proper food handling capabilities.'
+    answer: 'Yes. FoodSafe implements strict safety protocols including expiry time tracking, storage condition verification, and quality checks. Only food within safe consumption windows is eligible for pickup. We also verify all NGOs for proper food handling capabilities.'
   },
   {
     question: 'Who is liable for food safety?',
-    answer: 'The donor (event organizer) is responsible for ensuring the food was prepared and stored safely until pickup. NGOs verify the food condition upon pickup. SurplusLink provides the platform and verification systems but is not liable for food quality. All parties must acknowledge receipt and condition at pickup.'
+    answer: 'The donor (event organizer) is responsible for ensuring the food was prepared and stored safely until pickup. NGOs verify the food condition upon pickup. FoodSafe provides the platform and verification systems but is not liable for food quality. All parties must acknowledge receipt and condition at pickup.'
   },
   {
     question: 'Is this service free?',
-    answer: 'Yes, SurplusLink is completely free for both donors and NGOs. We are a mission-driven platform focused on reducing food waste and fighting hunger. Our operations are funded through partnerships with CSR programs and government subsidies.'
+    answer: 'Yes, FoodSafe is completely free for both donors and NGOs. We are a mission-driven platform focused on reducing food waste and fighting hunger. Our operations are funded through partnerships with CSR programs and government subsidies.'
   },
   {
     question: 'What cities are currently supported?',
-    answer: 'SurplusLink is currently available in major metropolitan areas. Our platform is expanding to new cities. Contact us to bring SurplusLink to your city. We work with local municipal bodies and NGOs to establish networks in new locations.'
+    answer: 'FoodSafe is currently available in major metropolitan areas. Our platform is expanding to new cities. Contact us to bring FoodSafe to your city. We work with local municipal bodies and NGOs to establish networks in new locations.'
   },
   {
     question: 'How are NGOs verified?',
@@ -498,7 +498,7 @@ export default function HowItWorksPage() {
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-4">Frequently Asked Questions</h2>
           <p className="text-muted-foreground text-center mb-12">
-            Common questions about SurplusLink.
+            Common questions about FoodSafe.
           </p>
 
           <div className="max-w-3xl mx-auto space-y-4">
@@ -521,7 +521,7 @@ export default function HowItWorksPage() {
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
           <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
-            Join SurplusLink today and help us reduce food waste while feeding those in need.
+            Join FoodSafe today and help us reduce food waste while feeding those in need.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/auth/register?role=donor">

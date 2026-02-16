@@ -4,8 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
 export const metadata = {
-  title: 'Impact | SurplusLink',
-  description: 'Real-time impact metrics and data-driven food redistribution. See how SurplusLink is transforming surplus management.',
+  title: 'Impact | FoodSafe',
+  description: 'Real-time impact metrics and data-driven food redistribution. See how FoodSafe is transforming surplus management.',
 };
 
 // Placeholder metrics - in production, these would come from database
@@ -141,7 +141,7 @@ export default function ImpactPage() {
                     </ul>
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-3 text-lg">SurplusLink Model</h4>
+                    <h4 className="font-semibold mb-3 text-lg">FoodSafe Model</h4>
                     <ul className="space-y-2 text-muted-foreground">
                       <li className="flex items-start gap-2">
                         <svg className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -197,7 +197,7 @@ export default function ImpactPage() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-muted-foreground">
-                    Integrate SurplusLink into your corporate events, conferences, and gatherings. 
+                    Integrate FoodSafe into your corporate events, conferences, and gatherings. 
                     Every event becomes an opportunity to make a measurable impact. We provide 
                     dedicated account management and custom reporting.
                   </p>
@@ -284,7 +284,7 @@ export default function ImpactPage() {
                   </CardHeader>
                   <CardContent>
                     <p className="text-sm text-muted-foreground">
-                      SurplusLink integrates with municipal waste management systems to provide 
+                      FoodSafe integrates with municipal waste management systems to provide 
                       a comprehensive view of urban food flows. Partner with local governments 
                       to incorporate food rescue into smart city master plans.
                     </p>

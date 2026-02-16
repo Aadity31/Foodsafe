@@ -49,7 +49,7 @@ export function NgoLayoutClient({ children }: NgoLayoutClientProps) {
       <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-white border-b px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <MapPin className="h-6 w-6 text-green-600" />
-          <span className="font-bold text-lg">SurplusLink</span>
+          <span className="font-bold text-lg">FoodSafe</span>
         </div>
         <Button
           variant="ghost"
@@ -81,7 +81,7 @@ export function NgoLayoutClient({ children }: NgoLayoutClientProps) {
             <div className="flex items-center gap-2">
               <MapPin className="h-8 w-8 text-green-600" />
               <div>
-                <span className="font-bold text-xl">SurplusLink</span>
+                <span className="font-bold text-xl">FoodSafe</span>
                 <p className="text-xs text-muted-foreground">NGO Dashboard</p>
               </div>
             </div>

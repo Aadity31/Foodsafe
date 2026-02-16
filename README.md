@@ -1,6 +1,6 @@
-# SurplusLink - Real-Time Event Food Rescue Network
+# FoodSafe - Real-Time Event Food Rescue Network
 
-SurplusLink is a production-ready MVP platform that connects event hosts with verified NGOs to rescue surplus food in real-time. Built with Next.js 14, Prisma, and PostgreSQL.
+FoodSafe is a production-ready MVP platform that connects event hosts with verified NGOs to rescue surplus food in real-time. Built with Next.js 14, Prisma, and PostgreSQL.
 
 ## 🚀 Features
 

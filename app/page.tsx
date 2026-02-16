@@ -82,7 +82,7 @@ export default function LandingPage() {
       {/* How It Works */}
       <section className="py-20">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">How SurplusLink Works</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">How FoodSafe Works</h2>
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             <div className="text-center">
               <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary mx-auto mb-4">
@@ -96,8 +96,7 @@ export default function LandingPage() {
                   strokeLinejoin="round"
                   className="h-8 w-8 text-primary-foreground"
                 >
-                  <path d="M12 2L2 7l10 5 10-5-10-5z" />
-                  <path d="M2 17l10 5 10-5" />
+                  <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
                 </svg>
               </div>
               <h3 className="text-xl font-semibold mb-2">1. Host Reports Surplus</h3>
@@ -226,12 +225,10 @@ export default function LandingPage() {
                     strokeLinejoin="round"
                     className="h-5 w-5 text-primary-foreground"
                   >
-                    <path d="M12 2L2 7l10 5 10-5-10-5z" />
-                    <path d="M2 17l10 5 10-5" />
-                    <path d="M2 12l10 5 10-5" />
+                    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
                   </svg>
                 </div>
-                <span className="font-bold">SurplusLink</span>
+                <span className="font-bold">FoodSafe</span>
               </div>
               <p className="text-sm text-muted-foreground">
                 Real-Time Event Food Rescue Network. Fighting hunger, reducing waste.
@@ -257,14 +254,14 @@ export default function LandingPage() {
             <div>
               <h4 className="font-semibold mb-4">Contact</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>contact@surpluslink.org</li>
-                <li>Support: help@surpluslink.org</li>
-                <li>Phone: 1-800-SURPLUS</li>
+                <li>contact@foodsafe.org</li>
+                <li>Support: help@foodsafe.org</li>
+                <li>Phone: 1-800-FOODSA</li>
               </ul>
             </div>
           </div>
           <div className="border-t mt-8 pt-8 text-center text-sm text-muted-foreground">
-            <p>© 2024 SurplusLink. All rights reserved. A non-profit initiative.</p>
+            <p>© 2024 FoodSafe. All rights reserved. A non-profit initiative.</p>
           </div>
         </div>
       </footer>

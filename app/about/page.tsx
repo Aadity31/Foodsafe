@@ -4,8 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
 export const metadata = {
-  title: 'About | SurplusLink',
-  description: 'Learn about SurplusLink - Real-Time Event Food Redistribution Network connecting event hosts with verified NGOs to rescue surplus food.',
+  title: 'About | FoodSafe',
+  description: 'Learn about FoodSafe - Real-Time Event Food Redistribution Network connecting event hosts with verified NGOs to rescue surplus food.',
 };
 
 export default function AboutPage() {
@@ -17,14 +17,14 @@ export default function AboutPage() {
         <div className="container mx-auto px-4 relative">
           <div className="max-w-3xl mx-auto text-center">
             <Badge variant="secondary" className="mb-4">
-              About SurplusLink
+              About FoodSafe
             </Badge>
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
               Real-Time Food Redistribution{' '}
               <span className="text-primary">For Events</span>
             </h1>
             <p className="text-xl text-muted-foreground mb-8">
-              SurplusLink connects event organizers with verified NGOs to rescue surplus food in real-time. 
+              FoodSafe connects event organizers with verified NGOs to rescue surplus food in real-time. 
               We bridge the gap between food surplus and food insecurity through technology, ensuring 
               quality-assured meals reach those who need them before they go to waste.
             </p>
@@ -295,7 +295,7 @@ export default function AboutPage() {
                 </div>
                 <h3 className="text-2xl font-bold mb-4">Verified NGO Network</h3>
                 <p className="text-muted-foreground mb-4">
-                  Every NGO on SurplusLink undergoes rigorous verification. We partner only 
+                  Every NGO on FoodSafe undergoes rigorous verification. We partner only 
                   with legitimate organizations committed to food distribution, ensuring 
                   your surplus reaches those who need it most.
                 </p>
@@ -499,7 +499,7 @@ export default function AboutPage() {
             <div className="prose prose-lg mx-auto">
               <p className="text-xl text-muted-foreground mb-8">
                 We envision a future where no surplus food goes to waste while people go hungry. 
-                SurplusLink aims to become the backbone of urban food redistribution infrastructure, 
+                FoodSafe aims to become the backbone of urban food redistribution infrastructure, 
                 enabling seamless coordination between food sources and distribution networks.
               </p>
             </div>
@@ -566,7 +566,7 @@ export default function AboutPage() {
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to Make an Impact?</h2>
           <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
-            Join SurplusLink today and be part of the solution. Whether you're an event organizer 
+            Join FoodSafe today and be part of the solution. Whether you're an event organizer 
             or an NGO, together we can reduce food waste and fight hunger.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
