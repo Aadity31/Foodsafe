@@ -30,7 +30,8 @@ export async function Navigation() {
                 strokeLinejoin="round"
                 className="h-5 w-5 text-primary-foreground"
               >
-                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+                <path d="M12 3c-1.2 0-3.07.34-4.06 1.12a4.33 4.33 0 0 0-2.87 2.87c-.78 1-1.12 2.87-1.12 4.07 0 4.63 3.83 8.41 8.05 8.41 4.63 0 8.41-3.83 8.41-8.05 0-1.2-.34-2.87-1.12-4.07a4.33 4.33 0 0 0-2.87-2.87C15.07 3.34 13.2 3 12 3Z" />
+                <path d="M12 7v.5" />
               </svg>
             </div>
             <span className="font-bold text-xl">FoodSafe</span>
