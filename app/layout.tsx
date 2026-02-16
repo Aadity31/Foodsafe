@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Link from "next/link";
 import "./globals.css";
 import { Navigation } from "@/components/navigation";
 import { SessionProvider } from "@/components/providers/session-provider";
@@ -81,6 +82,17 @@ export default function RootLayout({
               <p className="text-xs md:text-sm text-muted-foreground">
                 © 2024 FoodSafe. All rights reserved.
               </p>
+              <div className="flex items-center gap-4 text-xs md:text-sm text-muted-foreground">
+                <Link href="/privacy" className="hover:text-foreground transition-colors">
+                  Privacy Policy
+                </Link>
+                <Link href="/terms" className="hover:text-foreground transition-colors">
+                  Terms of Service
+                </Link>
+                <Link href="/contact" className="hover:text-foreground transition-colors">
+                  Contact
+                </Link>
+              </div>
               <p className="text-xs md:text-sm text-muted-foreground">
                 Fighting hunger, reducing waste.
               </p>
