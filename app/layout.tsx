@@ -3,6 +3,10 @@ import "./globals.css";
 import { Navigation } from "@/components/navigation";
 import { SessionProvider } from "@/components/providers/session-provider";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+export const runtime = 'nodejs';
+
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
