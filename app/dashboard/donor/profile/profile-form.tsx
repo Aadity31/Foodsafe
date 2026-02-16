@@ -5,6 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
+import { updateDonorProfile } from '@/lib/actions/auth';
+import { Loader2, Save, MapPin, Navigation } from 'lucide-react';
 
 interface User {
   id: string;
@@ -35,34 +37,68 @@ export function ProfileForm({ user, donorProfile }: ProfileFormProps) {
   const [organizationName, setOrganizationName] = useState(donorProfile.organizationName || '');
   const [phone, setPhone] = useState(donorProfile.phone || '');
   const [address, setAddress] = useState(donorProfile.address || '');
+  const [latitude, setLatitude] = useState(donorProfile.latitude?.toString() || '');
+  const [longitude, setLongitude] = useState(donorProfile.longitude?.toString() || '');
   const [isLoading, setIsLoading] = useState(false);
+  const [locationLoading, setLocationLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Get current location using GPS
+  const getCurrentLocation = () => {
+    if (!navigator.geolocation) {
+      setError('Geolocation is not supported by your browser');
+      return;
+    }
+
+    setLocationLoading(true);
+    setError(null);
+    
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setLatitude(position.coords.latitude.toString());
+        setLongitude(position.coords.longitude.toString());
+        setLocationLoading(false);
+      },
+      (err) => {
+        setError('Unable to retrieve your location. Please enter manually.');
+        setLocationLoading(false);
+      }
+    );
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setSuccess(false);
+    setError(null);
 
     try {
-      const response = await fetch('/api/profile/update', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name,
-          organizationName,
-          phone,
-          address,
-        }),
-      });
-
-      if (response.ok) {
-        alert('Profile updated successfully!');
-      } else {
-        const data = await response.json();
-        alert(data.error || 'Failed to update profile');
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('organizationName', organizationName);
+      formData.append('phone', phone);
+      formData.append('address', address);
+      
+      // Add location if provided
+      if (latitude) {
+        formData.append('latitude', latitude);
       }
-    } catch (error) {
-      alert('An error occurred while updating profile');
+      if (longitude) {
+        formData.append('longitude', longitude);
+      }
+
+      const result = await updateDonorProfile(formData);
+      
+      if (result?.error) {
+        setError(result.error);
+      } else {
+        setSuccess(true);
+        // Update user name in the session by reloading
+        window.location.reload();
+      }
+    } catch (err) {
+      setError('An error occurred while updating profile');
     } finally {
       setIsLoading(false);
     }
@@ -73,10 +109,22 @@ export function ProfileForm({ user, donorProfile }: ProfileFormProps) {
       <Card className="max-w-2xl mx-auto">
         <CardHeader>
           <CardTitle>Donor Profile</CardTitle>
-          <CardDescription>Manage your profile information</CardDescription>
+          <CardDescription>Manage your profile information and location</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
+            {success && (
+              <div className="p-3 text-sm text-green-600 bg-green-50 rounded-md">
+                Profile updated successfully!
+              </div>
+            )}
+            
+            {error && (
+              <div className="p-3 text-sm text-red-600 bg-red-50 rounded-md">
+                {error}
+              </div>
+            )}
+
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -133,9 +181,54 @@ export function ProfileForm({ user, donorProfile }: ProfileFormProps) {
               />
             </div>
 
+            <div className="space-y-2">
+              <Label>Location</Label>
+              <div className="flex gap-2">
+                <Input
+                  placeholder="Latitude"
+                  value={latitude}
+                  onChange={(e) => setLatitude(e.target.value)}
+                  className="flex-1"
+                />
+                <Input
+                  placeholder="Longitude"
+                  value={longitude}
+                  onChange={(e) => setLongitude(e.target.value)}
+                  className="flex-1"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  onClick={getCurrentLocation}
+                  disabled={locationLoading}
+                  title="Use current location"
+                >
+                  {locationLoading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Navigation className="h-4 w-4" />
+                  )}
+                </Button>
+              </div>
+              <p className="text-sm text-gray-500">
+                Click the navigation icon to get your current location
+              </p>
+            </div>
+
             <div className="pt-4">
               <Button type="submit" disabled={isLoading} className="w-full">
-                {isLoading ? 'Updating...' : 'Update Profile'}
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Updating...
+                  </>
+                ) : (
+                  <>
+                    <Save className="mr-2 h-4 w-4" />
+                    Update Profile
+                  </>
+                )}
               </Button>
             </div>
           </form>

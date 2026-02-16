@@ -120,12 +120,31 @@ export async function updateDonorProfile(formData: FormData) {
     return { error: 'Unauthorized' };
   }
 
+  const name = formData.get('name') as string;
+  const organizationName = formData.get('organizationName') as string;
+  const phone = formData.get('phone') as string;
+  const address = formData.get('address') as string;
+  const latitudeStr = formData.get('latitude') as string;
+  const longitudeStr = formData.get('longitude') as string;
+  
+  // Convert strings to numbers or undefined
+  const latitude = latitudeStr ? parseFloat(latitudeStr) : undefined;
+  const longitude = longitudeStr ? parseFloat(longitudeStr) : undefined;
+  
+  // Validate latitude and longitude if provided
+  if (latitude !== undefined && (isNaN(latitude) || latitude < -90 || latitude > 90)) {
+    return { error: 'Invalid latitude value' };
+  }
+  if (longitude !== undefined && (isNaN(longitude) || longitude < -180 || longitude > 180)) {
+    return { error: 'Invalid longitude value' };
+  }
+
   const rawData = {
-    organizationName: formData.get('organizationName'),
-    phone: formData.get('phone'),
-    address: formData.get('address'),
-    latitude: formData.get('latitude'),
-    longitude: formData.get('longitude'),
+    organizationName: organizationName || undefined,
+    phone: phone || undefined,
+    address: address || undefined,
+    latitude,
+    longitude,
   };
 
   const validated = donorProfileSchema.safeParse(rawData);
@@ -134,12 +153,21 @@ export async function updateDonorProfile(formData: FormData) {
     return { error: validated.error.errors.map(e => e.message).join(', ') };
   }
 
+  // Update user name if provided
+  if (name) {
+    await prisma.user.update({
+      where: { id: session.user.id },
+      data: { name },
+    });
+  }
+
   await prisma.donorProfile.update({
     where: { userId: session.user.id },
     data: validated.data,
   });
 
   revalidatePath('/dashboard/donor');
+  revalidatePath('/dashboard/donor/profile');
   return { success: true };
 }
 

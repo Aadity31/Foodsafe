@@ -89,11 +89,11 @@ export const ngoProfileSchema = z.object({
  * Donor profile schema
  */
 export const donorProfileSchema = z.object({
-  organizationName: z.string().min(2).optional(),
-  phone: phoneSchema.optional(),
-  address: z.string().max(255).optional(),
-  latitude: z.number().min(-90).max(90).optional(),
-  longitude: z.number().min(-180).max(180).optional(),
+  organizationName: z.string().optional().nullable(),
+  phone: phoneSchema.optional().nullable(),
+  address: z.string().optional().nullable(),
+  latitude: z.number().min(-90).max(90).optional().nullable(),
+  longitude: z.number().min(-180).max(180).optional().nullable(),
 });
 
 /**

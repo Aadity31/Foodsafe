@@ -4,7 +4,7 @@ import prisma from '@/lib/db/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { calculateDistance, getTimeRemaining, formatDuration } from '@/lib/utils/geo';
-import { generateOTP, hashOTP } from '@/lib/utils/otp';
+import { generateOTP, hashOTP, verifyOTP } from '@/lib/utils/otp';
 import { revalidatePath } from 'next/cache';
 
 /**
@@ -292,6 +292,7 @@ export async function acceptFoodRequest(foodRequestId: string) {
         data: {
           foodRequestId,
           ngoId: ngoProfile.id,
+          otp,
           otpHash,
         },
       });
@@ -391,9 +392,9 @@ export async function getActivePickups() {
 
 /**
  * Confirm Pickup
- * Called by NGO after physical pickup with photo
+ * Called by NGO after physical pickup with photo and OTP
  */
-export async function confirmPickup(foodRequestId: string, photoUrl?: string) {
+export async function confirmPickup(foodRequestId: string, photoUrl?: string, otp?: string) {
   const session = await getServerSession(authOptions);
   if (!session?.user || session.user.role !== 'NGO') {
     return { error: 'Unauthorized' };
@@ -431,6 +432,18 @@ export async function confirmPickup(foodRequestId: string, photoUrl?: string) {
 
       if (reservation.foodRequest.status !== 'RESERVED') {
         throw new Error('Food request is not in reserved status');
+      }
+
+      // Verify OTP if provided
+      if (otp && reservation.otpHash) {
+        const isValidOtp = await verifyOTP(otp, reservation.otpHash);
+        if (!isValidOtp) {
+          throw new Error('Invalid OTP');
+        }
+        // Check OTP expiry
+        if (reservation.otpExpiry && new Date() > reservation.otpExpiry) {
+          throw new Error('OTP has expired');
+        }
       }
 
       // Update reservation

@@ -17,6 +17,7 @@ interface Pickup {
   failedAttempts: number;
   status: string;
   photoUrl: string | null;
+  otp: string | null; // Plain OTP for display
   foodRequest: {
     id: string;
     category: string;
@@ -57,16 +58,18 @@ export function ActivePickupsClient({ pickups, ngoProfile }: ActivePickupsClient
   const [showConfirmModal, setShowConfirmModal] = useState<string | null>(null);
   const [showCancelModal, setShowCancelModal] = useState<string | null>(null);
   const [photoUrl, setPhotoUrl] = useState('');
+  const [otp, setOtp] = useState('');
   const [confirmedPickups, setConfirmedPickups] = useState<Set<string>>(new Set());
 
   async function handleConfirm(foodRequestId: string) {
     setConfirming(foodRequestId);
     try {
-      const result = await confirmPickup(foodRequestId, photoUrl || undefined);
+      const result = await confirmPickup(foodRequestId, photoUrl || undefined, otp || undefined);
       if (result.success) {
         setConfirmedPickups(prev => new Set(prev).add(foodRequestId));
         setShowConfirmModal(null);
         setPhotoUrl('');
+        setOtp('');
       } else {
         alert(result.error || 'Failed to confirm pickup');
       }
@@ -226,7 +229,13 @@ export function ActivePickupsClient({ pickups, ngoProfile }: ActivePickupsClient
                       <>
                         <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-800">
                           <p className="font-medium">Waiting for donor confirmation</p>
-                          <p className="text-xs mt-1">Share the OTP with the donor to confirm pickup</p>
+                          <p className="text-xs mt-1">Ask the donor for the OTP to confirm pickup</p>
+                          {pickup.otp && (
+                            <div className="mt-2 p-2 bg-white border border-blue-300 rounded text-center">
+                              <p className="text-xs text-blue-600">Your OTP:</p>
+                              <p className="text-lg font-bold text-blue-800">{pickup.otp}</p>
+                            </div>
+                          )}
                         </div>
                         <Button
                           variant="outline"
@@ -257,6 +266,19 @@ export function ActivePickupsClient({ pickups, ngoProfile }: ActivePickupsClient
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
+              <div>
+                <Label htmlFor="otp">OTP from Donor</Label>
+                <Input
+                  id="otp"
+                  placeholder="Enter 6-digit OTP"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  maxLength={6}
+                />
+                <p className="text-xs text-muted-foreground mt-1">
+                  Ask the donor for the 6-digit OTP
+                </p>
+              </div>
               <div>
                 <Label htmlFor="photo">Pickup Photo URL (Optional)</Label>
                 <Input
@@ -289,6 +311,7 @@ export function ActivePickupsClient({ pickups, ngoProfile }: ActivePickupsClient
                   onClick={() => {
                     setShowConfirmModal(null);
                     setPhotoUrl('');
+                    setOtp('');
                   }}
                 >
                   Cancel

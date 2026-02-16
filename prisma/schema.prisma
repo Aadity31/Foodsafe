@@ -151,6 +151,7 @@ model Reservation {
   id              String            @id @default(cuid())
   foodRequestId   String            @unique
   ngoId           String
+  otp             String?           // Plain OTP for display
   otpHash         String
   otpExpiry       DateTime?         // OTP validity period
   photoUrl        String?

@@ -198,6 +198,7 @@ export async function acceptFoodRequest(foodRequestId: string) {
       data: {
         foodRequestId,
         ngoId: ngoProfile.id,
+        otp,
         otpHash,
       },
     }),

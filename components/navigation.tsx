@@ -73,7 +73,7 @@ export async function Navigation() {
                 <span className="text-sm text-muted-foreground">
                   {session.user.name}
                 </span>
-                <Link href="/api/auth/signout">
+                <Link href="/auth/signout">
                   <Button variant="outline" size="sm">Sign Out</Button>
                 </Link>
               </div>
