@@ -449,7 +449,7 @@ export default function ImpactPage() {
               </Button>
             </Link>
             <Link href="/contact">
-              <Button size="lg" variant="outline" className="w-full sm:w-auto border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary">
+              <Button size="lg" variant="outline" className="w-full sm:w-auto border-primary-foreground text-red-500 hover:bg-primary-foreground hover:text-primary">
                 Contact Sales
               </Button>
             </Link>

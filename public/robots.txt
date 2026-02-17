@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://foodsave.example.com
+
+# Sitemaps
+Sitemap: https://foodsave.example.com/sitemap.xml

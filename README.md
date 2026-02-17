@@ -29,39 +29,84 @@ FoodSafe is a production-ready MVP platform that connects event hosts with verif
 ## 📁 Project Structure
 
 ```
-surpluslink/
+foodsafe/
 ├── app/                      # Next.js App Router
 │   ├── page.tsx             # Landing page
 │   ├── layout.tsx           # Root layout
+│   ├── loading.tsx          # Global loading
+│   ├── globals.css          # Global styles
+│   ├── about/               # About page
+│   ├── admin/               # Admin dashboard
 │   ├── auth/                # Authentication pages
 │   │   ├── login/
-│   │   └── register/
+│   │   ├── register/
+│   │   └── signout/
+│   ├── contact/             # Contact page
 │   ├── dashboard/
 │   │   ├── donor/           # Donor dashboard
+│   │   │   ├── analytics/
+│   │   │   ├── create-request/
+│   │   │   ├── profile/
+│   │   │   └── requests/
+│   │   │       └── [id]/
 │   │   └── ngo/             # NGO dashboard
-│   └── admin/               # Admin panel
+│   │       ├── active-pickups/
+│   │       ├── analytics/
+│   │       ├── available-requests/
+│   │       ├── history/
+│   │       └── profile/
+│   ├── how-it-works/        # How it works page
+│   ├── impact/              # Impact page
+│   ├── privacy/             # Privacy policy
+│   ├── terms/               # Terms of service
+│   ├── verification-pending/# Verification pending page
+│   └── api/                 # API routes
+│       └── auth/
+│           └── [...nextauth]/
 ├── components/
 │   ├── ui/                  # ShadCN UI components
-│   └── navigation.tsx        # Main navigation
+│   │   ├── badge.tsx
+│   │   ├── button.tsx
+│   │   ├── card.tsx
+│   │   ├── input.tsx
+│   │   ├── label.tsx
+│   │   ├── select.tsx
+│   │   └── tabs.tsx
+│   ├── providers/           # React providers
+│   ├── navigation.tsx       # Main navigation
+│   └── mobile-menu.tsx      # Mobile navigation
 ├── lib/
 │   ├── actions/             # Server actions
+│   │   ├── admin.ts
 │   │   ├── auth.ts
 │   │   ├── food-request.ts
-│   │   └── admin.ts
+│   │   └── ngo.ts
 │   ├── utils/               # Utility functions
+│   │   ├── cn.ts            # Class name utility
 │   │   ├── geo.ts           # Haversine formula
 │   │   ├── otp.ts           # OTP generation/verification
 │   │   └── validation.ts    # Zod schemas
 │   ├── db/                  # Database
 │   │   └── prisma.ts
-│   └── auth.ts              # NextAuth config
+│   ├── auth.ts              # NextAuth config
+│   └── middleware.ts        # Auth middleware
 ├── prisma/
 │   ├── schema.prisma        # Database schema
-│   └── seed.ts              # Database seeding
+│   ├── seed.ts              # Database seeding
+│   └── migrations/          # Database migrations
 ├── public/                  # Static assets
+│   ├── sitemap.xml          # SEO sitemap
+│   ├── robots.txt           # Robots.txt
+│   └── favicon.svg          # Favicon
 ├── Dockerfile
 ├── docker-compose.yml
-└── tailwind.config.ts
+├── tailwind.config.ts
+├── postcss.config.mjs
+├── next.config.mjs
+├── tsconfig.json
+├── package.json
+├── eslint.config.mjs
+└── next-sitemap.config.js   # Sitemap configuration
 ```
 
 ## 🚀 Getting Started
@@ -139,6 +184,44 @@ JWT_SECRET="your-jwt-secret-key"
 - `GET /api/food-requests` - List requests (NGO)
 - `POST /api/food-requests/:id/accept` - Accept request (NGO)
 - `POST /api/food-requests/:id/complete` - Complete pickup (OTP)
+
+## 🗺️ SEO Sitemap
+
+### Regenerate Sitemap
+To regenerate the sitemap for Google Search Engine:
+
+```bash
+pnpm next-sitemap
+```
+
+This will generate:
+- `public/sitemap.xml` - XML sitemap for search engines
+- `public/robots.txt` - Robots.txt file
+
+The sitemap includes all public pages and automatically excludes private routes (admin, dashboard, api).
+
+### Access on Vercel
+
+Once deployed to Vercel, your sitemap will be automatically available at:
+
+- **Sitemap:** `https://your-vercel-domain.vercel.app/sitemap.xml`
+- **Robots.txt:** `https://your-vercel-domain.vercel.app/robots.txt`
+
+Example:
+```
+https://foodsafe.vercel.app/sitemap.xml
+https://foodsave.vercel.app/robots.txt
+```
+
+### Submit to Google
+
+1. Go to [Google Search Console](https://search.google.com/search-console)
+2. Add your property (domain or URL prefix)
+3. Navigate to Sitemaps in the left sidebar
+4. Enter `sitemap.xml` in the "Add a new sitemap" field
+5. Click Submit
+
+Google will then crawl and index your pages.
 
 ## 🔐 Security Features
 
