@@ -1,18 +1,39 @@
+'use client';
+
 import Link from 'next/link';
-import { getServerSession } from 'next-auth/next';
+import { usePathname } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
-import { authOptions } from '@/lib/auth';
 import { MobileMenu } from './mobile-menu';
 
-export async function Navigation() {
-  let session = null;
+function shouldHideNavigation(pathname: string, isLoggedIn: boolean): boolean {
+  if (!isLoggedIn) return false;
   
-  try {
-    session = await getServerSession(authOptions);
-  } catch (error) {
-    // Session error - user not logged in or session invalid
-    // Continue without session (show logged out state)
-    console.warn('Session error:', error);
+  // Hide navigation for logged-in users on dashboard and admin routes
+  // Check for NGO dashboard routes
+  if (pathname.startsWith('/dashboard/ngo')) return true;
+  // Check for Donor dashboard routes
+  if (pathname.startsWith('/dashboard/donor')) return true;
+  // Check for Admin routes
+  if (pathname.startsWith('/admin')) return true;
+  
+  return false;
+}
+
+export function Navigation() {
+  const pathname = usePathname();
+  const { data: session, status } = useSession();
+  const isLoading = status === 'loading';
+  const isLoggedIn = status === 'authenticated' && !!session;
+
+  // Don't render anything while loading or if we should hide navigation
+  if (isLoading) {
+    return null;
+  }
+
+  // Check if we should hide the navigation
+  if (shouldHideNavigation(pathname, isLoggedIn)) {
+    return null;
   }
 
   return (
