@@ -55,13 +55,14 @@ export async function getNgoDashboardStats() {
 
   const now = new Date();
 
-  // Get counts using parallel queries
+  // Get all data using parallel queries
   const [
     availableRequests,
     activePickups,
     completedPickups,
     expiredMissed,
     completedReservations,
+    recentActivity,
   ] = await Promise.all([
     // Available (OPEN) requests within service radius - count all for now
     prisma.foodRequest.count({
@@ -101,31 +102,29 @@ export async function getNgoDashboardStats() {
         foodRequest: true,
       },
     }),
-  ]);
-
-  // Calculate total meals collected
-  const totalMealsCollected = completedReservations.reduce(
-    (sum, r) => sum + r.foodRequest.quantity, 
-    0
-  );
-
-  // Get recent activity
-  const recentActivity = await prisma.reservation.findMany({
-    where: { ngoId: ngoProfile.id },
-    include: {
-      foodRequest: {
-        include: {
-          donor: {
-            include: {
-              user: { select: { name: true } },
+    // Get recent activity
+    prisma.reservation.findMany({
+      where: { ngoId: ngoProfile.id },
+      include: {
+        foodRequest: {
+          include: {
+            donor: {
+              include: {
+                user: { select: { name: true } },
+              },
             },
           },
         },
       },
-    },
-    orderBy: { acceptedAt: 'desc' },
-    take: 10,
-  });
+      orderBy: { acceptedAt: 'desc' },
+      take: 10,
+    }),
+  ]);
+
+  const totalMealsCollected = completedReservations.reduce(
+    (sum, r) => sum + r.foodRequest.quantity, 
+    0
+  );
 
   return {
     availableRequests,

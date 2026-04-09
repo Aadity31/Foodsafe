@@ -7,7 +7,7 @@ async function main() {
   console.log('🌱 Starting database seed...');
 
   // Create admin user only
-  const adminPassword = await bcrypt.hash('admin@himani123', 12);
+  const adminPassword = await bcrypt.hash('admin@123', 12);
   const admin = await prisma.user.upsert({
     where: { email: 'admin@foodsafe.org' },
     update: {},

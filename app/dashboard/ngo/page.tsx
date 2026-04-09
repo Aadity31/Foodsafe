@@ -12,22 +12,22 @@ export default async function NgoDashboard() {
     redirect('/auth/login');
   }
 
-  const ngoProfile = await prisma.ngoProfile.findUnique({
-    where: { userId: session.user.id },
-  });
+  const [ngoProfile, statsResult] = await Promise.all([
+    prisma.ngoProfile.findUnique({
+      where: { userId: session.user.id },
+    }),
+    getNgoDashboardStats(),
+  ]);
 
   if (!ngoProfile) {
     redirect('/auth/register');
   }
 
-  // Check if NGO is approved
   if (ngoProfile.approvalStatus !== 'APPROVED') {
     redirect('/verification-pending');
   }
-
-  const statsResult = await getNgoDashboardStats();
   
-  const stats = !('error' in statsResult) ? statsResult : {
+  const statsData = !('error' in statsResult) ? statsResult : {
     availableRequests: 0,
     activePickups: 0,
     completedPickups: 0,
@@ -39,7 +39,7 @@ export default async function NgoDashboard() {
   return (
     <NgoDashboardClient
       session={session}
-      stats={stats}
+      stats={statsData}
       ngoProfile={ngoProfile}
     />
   );

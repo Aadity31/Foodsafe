@@ -20,22 +20,23 @@ export default async function DonorDashboard() {
     redirect('/auth/register');
   }
 
-  const stats = await getDonorStats();
-
-  const recentRequests = await prisma.foodRequest.findMany({
-    where: { donorId: donorProfile.id },
-    include: {
-      reservation: {
-        include: {
-          ngo: {
-            include: { user: { select: { name: true } } },
+  const [stats, recentRequests] = await Promise.all([
+    getDonorStats(),
+    prisma.foodRequest.findMany({
+      where: { donorId: donorProfile.id },
+      include: {
+        reservation: {
+          include: {
+            ngo: {
+              include: { user: { select: { name: true } } },
+            },
           },
         },
       },
-    },
-    orderBy: { createdAt: 'desc' },
-    take: 10,
-  });
+      orderBy: { createdAt: 'desc' },
+      take: 10,
+    }),
+  ]);
 
   return (
     <DonorDashboardClient

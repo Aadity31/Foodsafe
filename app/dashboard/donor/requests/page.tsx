@@ -11,23 +11,23 @@ export default async function DonorRequestsPage() {
     redirect('/auth/login');
   }
 
-  const donorProfile = await prisma.donorProfile.findUnique({
-    where: { userId: session.user.id },
-  });
+  const [donorProfile, _] = await Promise.all([
+    prisma.donorProfile.findUnique({
+      where: { userId: session.user.id },
+    }),
+    prisma.foodRequest.updateMany({
+      where: {
+        donorId: session.user.id,
+        status: 'OPEN',
+        expiryTime: { lt: new Date() },
+      },
+      data: { status: 'EXPIRED' },
+    }),
+  ]);
 
   if (!donorProfile) {
     redirect('/auth/register');
   }
-
-  // Auto-expire requests that have passed their expiry time
-  await prisma.foodRequest.updateMany({
-    where: {
-      donorId: donorProfile.id,
-      status: 'OPEN',
-      expiryTime: { lt: new Date() },
-    },
-    data: { status: 'EXPIRED' },
-  });
 
   const requests = await prisma.foodRequest.findMany({
     where: { donorId: donorProfile.id },

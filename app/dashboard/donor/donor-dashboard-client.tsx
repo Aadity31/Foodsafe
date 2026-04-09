@@ -22,8 +22,6 @@ export function DonorDashboardClient({
   recentRequests,
   donorProfile,
 }: DonorDashboardClientProps) {
-  const [showForm, setShowForm] = useState(false);
-
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'OPEN':
@@ -50,24 +48,7 @@ export function DonorDashboardClient({
             Welcome back, {session.user.name}
           </p>
         </div>
-        <Button onClick={() => setShowForm(!showForm)}>
-          {showForm ? 'Cancel' : '+ Report Surplus Food'}
-        </Button>
       </div>
-
-      {showForm && (
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle>Report Surplus Food</CardTitle>
-            <CardDescription>
-              Fill in the details below to notify nearby NGOs about your surplus food
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <FoodRequestForm onSuccess={() => setShowForm(false)} />
-          </CardContent>
-        </Card>
-      )}
 
       {/* Stats Cards */}
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
@@ -108,7 +89,7 @@ export function DonorDashboardClient({
         <CardContent>
           {recentRequests.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
-              No food requests yet. Click "Report Surplus Food" to get started.
+              No food requests yet.
             </div>
           ) : (
             <div className="space-y-4">
